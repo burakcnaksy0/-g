@@ -106,16 +106,60 @@ let touchEndX = 0;
 // 2. SECRET ENTRY / PASSWORD LOGIC (ŞEYMA'YA ÖZEL)
 // ==========================================================================
 
-const errorMessages = [
-  "Biraz daha düşün bakalım... Bizim için çok özel bir gün. 💜",
-  "Şeyma... Tarihimizi unutmadın değil mi? 🥺",
-  "Afet bile hatırlıyor olabilir, bir daha dene bakalım 🐈",
-  "İpucu: Dört basamaklı o en güzel günümüz (GGAA) ✨"
+const roastMessages = [
+  "Daha ilk denemede patladın... Cidden unuttun mu? Gözlerim yaşardı valla 🤦‍♂️💀",
+  "Şeyma rezil olduk şu an... Balık hafızası modu mu açıldı hayırdır? 🐟😂",
+  "Afet'e sorsam klavyeye tek patisiyle doğru basardı, kedi senden daha sadık çıktı 🐈🤦‍♂️",
+  "Buzdolabı taşırken bu kadar efor sarf etmedim, azıcık saksıyı çalıştır be kadın! 🧊",
+  "Bak parmaklarını kütletirim ha! Dört basamak alt tarafı: GGAA şeklinde yazacaksın 💥",
+  "Engellemepls dedik ama sen beni kafadan silmişsin resmen... 22/07 işte insafsız! 🙄",
+  "Hâlâ mı yanlış?! Şaka mısın sen ya, otur sıfır! 2207 yazıp gir artık rezil etme bizi 🤦‍♂️💀"
 ];
-let errorIndex = 0;
+
+const unlockBtnRoasts = [
+  "tanışma tarihi pls ✨",
+  "Cidden mi? Tekrar dene bari... 🙄",
+  "Zorlama, düşün biraz 😂",
+  "Afet'e sor istersen? 🐾",
+  "Parmak kütletme loading... 💥",
+  "2207 yaz kurtul insafsız 🤦‍♂️"
+];
+
+const inputPlaceholders = [
+  "Tarihimiz...",
+  "Unutmadım de lütfen... 🥺",
+  "Günün ve ayın sayıları...",
+  "İpucu: Temmuz ayı...",
+  "2207 işte yaz artık..."
+];
+
+let wrongAttempts = 0;
+let isSubmittingPassword = false;
 
 function handlePasswordSubmit() {
+  if (isSubmittingPassword) return;
+  isSubmittingPassword = true;
+  setTimeout(() => {
+    isSubmittingPassword = false;
+  }, 400);
+
   const entered = elements.passwordInput.value.trim();
+
+  // Boş basıldıysa zorbala
+  if (!entered) {
+    elements.passwordInput.classList.remove('shake');
+    void elements.passwordInput.offsetWidth; // Trigger reflow
+    elements.passwordInput.classList.add('shake');
+
+    elements.passwordError.style.color = "#fbcfe8";
+    elements.passwordError.style.fontSize = "0.88rem";
+    elements.passwordError.textContent = "Boş basarak nereye varmayı hedefliyorsun acaba? Şifreyi yaz bari tembel teneke! 😂";
+
+    setTimeout(() => {
+      elements.passwordInput.classList.remove('shake');
+    }, 500);
+    return;
+  }
 
   if (entered === siteConfig.password) {
     // DOĞRU ŞİFRE
@@ -123,11 +167,16 @@ function handlePasswordSubmit() {
     elements.inputWrapper.classList.add('success-glow');
     elements.unlockBtn.classList.add('success-glow');
 
-    // Şeyma'ya özel sıcak karşılama mesajı
+    // Şeyma'ya özel karşılama mesajı (daha önce yanlış girdiyse ona göre laf sok)
     elements.passwordError.style.color = "#c4b5fd";
-    elements.passwordError.style.fontSize = "1.05rem";
+    elements.passwordError.style.fontSize = "1.02rem";
     elements.passwordError.style.fontWeight = "600";
-    elements.passwordError.textContent = `Hoş geldin Şeyma... 💜`;
+
+    if (wrongAttempts > 0) {
+      elements.passwordError.textContent = "Sonunda be! Biraz zorbalanmadan hatırlayamıyorsun... Hoş geldin Şeyma 💜";
+    } else {
+      elements.passwordError.textContent = "Vay be, tekte bildin! Hoş geldin Şeyma... 💜";
+    }
 
     // Zambak yaprakları, mor kalpler ve yıldız parçacıkları
     createBurstParticles(window.innerWidth / 2, window.innerHeight / 2, 30, ['💜', '✨', '🤍', '🌿', '✦']);
@@ -152,15 +201,29 @@ function handlePasswordSubmit() {
     }, 850);
 
   } else {
-    // YANLIŞ ŞİFRE
+    // YANLIŞ ŞİFRE - ZORBALAMA MODU
     elements.passwordInput.classList.remove('shake');
     void elements.passwordInput.offsetWidth; // Trigger reflow
     elements.passwordInput.classList.add('shake');
 
     elements.passwordError.style.color = "#fbcfe8";
     elements.passwordError.style.fontSize = "0.88rem";
-    elements.passwordError.textContent = errorMessages[errorIndex % errorMessages.length];
-    errorIndex++;
+
+    const msg = roastMessages[Math.min(wrongAttempts, roastMessages.length - 1)];
+    elements.passwordError.textContent = msg;
+
+    // Buton metni ve placeholder ile de hafif dalga geç
+    const btnSpan = elements.unlockBtn.querySelector('.btn-text');
+    if (btnSpan) {
+      btnSpan.textContent = unlockBtnRoasts[Math.min(wrongAttempts + 1, unlockBtnRoasts.length - 1)];
+    }
+
+    if (wrongAttempts < inputPlaceholders.length - 1) {
+      elements.passwordInput.placeholder = inputPlaceholders[wrongAttempts + 1];
+    }
+
+    elements.passwordInput.select();
+    wrongAttempts++;
 
     setTimeout(() => {
       elements.passwordInput.classList.remove('shake');
