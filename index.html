@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Şeyma & 22/07 — Bizim Hikâyemiz 💜</title>
+  <meta name="description"
+    content="Şeyma için özel olarak hazırlanmış, mor geceler ve zambaklarla bezenmiş romantik aşk hikâyemiz.">
+  <meta name="theme-color" content="#100018">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Favicon Emoji -->
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
+
+  <!-- Google Fonts: Playfair Display (Serif), Plus Jakarta Sans (Modern Clean Body), Cinzel (Mystic) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="is-locked">
+
+  <!-- ============================================================
+       CANVAS BACKGROUND (Stars, subtle cosmic particles & petal dust)
+       ============================================================ -->
+  <canvas id="ambientCanvas" class="ambient-canvas" aria-hidden="true"></canvas>
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+  <!-- ============================================================
+       HIDDEN AUDIO ELEMENT FOR BACKGROUND MUSIC
+       ============================================================ -->
+  <audio id="bgAudio" preload="auto" loop playsinline>
+    <source src="musics/take-me-there.mp4" type="audio/mp4">
+    <source src="musics/take-me-there.mp4" type="video/mp4">
+  </audio>
+
+  <!-- ============================================================
+       1. SECRET ENTRY / PASSWORD SCREEN (ŞEYMA'YA ÖZEL)
+       ============================================================ -->
+  <div id="secretScreen" class="secret-screen" role="dialog" aria-modal="true" aria-labelledby="secretTitle">
+    <div class="secret-ambient-glow" aria-hidden="true"></div>
+
+    <!-- Subtle SVG Lily Motifs in Secret Screen Background -->
+    <div class="secret-bg-lily left" aria-hidden="true">
+      <svg viewBox="0 0 100 140" fill="none" stroke="currentColor">
+        <path d="M50 140 C50 90, 45 60, 20 30 C35 30, 45 45, 50 60 C55 45, 65 30, 80 30 C55 60, 50 90, 50 140 Z"
+          stroke-width="1.2" opacity="0.6" />
+        <path d="M50 60 C35 15, 20 20, 10 35 C20 45, 38 48, 50 60 Z" stroke-width="1" opacity="0.5" />
+        <path d="M50 60 C65 15, 80 20, 90 35 C80 45, 62 48, 50 60 Z" stroke-width="1" opacity="0.5" />
+        <circle cx="50" cy="45" r="2" fill="currentColor" opacity="0.8" />
+      </svg>
+    </div>
+    <div class="secret-bg-lily right" aria-hidden="true">
+      <svg viewBox="0 0 100 140" fill="none" stroke="currentColor">
+        <path d="M50 140 C50 90, 45 60, 20 30 C35 30, 45 45, 50 60 C55 45, 65 30, 80 30 C55 60, 50 90, 50 140 Z"
+          stroke-width="1.2" opacity="0.6" />
+        <path d="M50 60 C35 15, 20 20, 10 35 C20 45, 38 48, 50 60 Z" stroke-width="1" opacity="0.5" />
+        <path d="M50 60 C65 15, 80 20, 90 35 C80 45, 62 48, 50 60 Z" stroke-width="1" opacity="0.5" />
+        <circle cx="50" cy="45" r="2" fill="currentColor" opacity="0.8" />
+      </svg>
+    </div>
+
+    <div class="secret-card glass-panel" id="secretCard">
+      <!-- Lily & Heart Emblem -->
+      <div class="secret-emblem" aria-hidden="true">
+        <span class="emblem-sparkle">✦</span>
+        <div class="emblem-heart">💜</div>
+        <span class="emblem-sparkle">✦</span>
+      </div>
+
+      <div class="secret-salutation">Şeyma,</div>
+      <h1 id="secretTitle" class="secret-title">Sana küçük bir dünya hazırladım.</h1>
+      <p class="secret-subtitle">İçeri girmek için sadece ikimizin bildiği o en çakmak istediğim günü hatırlaman
+        gerekiyor... ✨</p>
+
+      <form id="passwordForm" class="password-form" onsubmit="return false;" novalidate>
+        <div class="input-wrapper" id="inputWrapper">
+          <input type="password" id="passwordInput" class="password-input" placeholder="Tarihimiz..." autocomplete="off"
+            autofocus maxlength="20" inputmode="numeric" aria-label="Şeyma için gizli şifre">
+          <button type="button" id="togglePasswordBtn" class="toggle-password-btn" aria-label="Şifreyi Göster / Gizle">
+            <svg class="eye-icon eye-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg class="eye-icon eye-closed" viewBox="0 0 24 24" width="20" height="20" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              style="display:none;">
+              <path
+                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+              </path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div id="passwordError" class="password-error" role="alert" aria-live="polite"></div>
+
+        <button type="submit" id="unlockBtn" class="btn-unlock">
+          <span class="btn-text">tanışma tarihi pls ✨</span>
+          <span class="btn-shimmer" aria-hidden="true"></span>
+        </button>
+      </form>
+
+      <div class="secret-footer">
+        <span class="secret-hint-small">İpucu: Bizim hikâyemizin başladığı o özel gün (GGAA)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN SITE (Revealed after password)
+       ============================================================ -->
+  <div id="mainSite" class="main-site" aria-hidden="true">
+
+    <!-- FLOATING TOP NAVIGATION -->
+    <header class="site-header" id="siteHeader">
+      <nav class="nav-container glass-panel" aria-label="Ana Menü">
+        <a href="#hero" class="nav-brand" aria-label="Ana Sayfaya Git">
+          <span class="brand-monogram">Şeyma & 22/07</span>
+          <span class="brand-dot">✦</span>
+          <span class="brand-name">Bizim Hikâyemiz</span>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#story" class="nav-link">Hikâyemiz</a></li>
+          <li><a href="#gallery" class="nav-link">Anılarımız</a></li>
+          <li><a href="#lily" class="nav-link">Zambaklar 🌿</a></li>
+          <li><a href="#supernatural" class="nav-link">Supernatural</a></li>
+          <li><a href="#afet" class="nav-link">Afet 🐾</a></li>
+          <li><a href="#why-i-love-you" class="nav-link">Neden Sen?</a></li>
+          <li><a href="#counter" class="nav-link">22 / 07</a></li>
+        </ul>
+
+        <!-- Mobile Menu Toggle Button (Min 44x44px hit-box) -->
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menüyü Aç / Kapat"
+          aria-expanded="false">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- MOBILE NAVIGATION FULLSCREEN / BOTTOM SHEET DRAWER -->
+    <div class="mobile-drawer glass-panel" id="mobileDrawer" aria-hidden="true">
+      <div class="drawer-header">
+        <span class="drawer-title">Şeyma 💜 22/07</span>
+        <button type="button" id="drawerCloseBtn" class="drawer-close-btn" aria-label="Menüyü Kapat">✕</button>
+      </div>
+      <ul class="mobile-nav-links">
+        <li><a href="#story" class="mobile-nav-link"><span>01</span> Bizim Hikâyemiz</a></li>
+        <li><a href="#gallery" class="mobile-nav-link"><span>02</span> Anılarımız</a></li>
+        <li><a href="#lily" class="mobile-nav-link"><span>03</span> Şeyma'nın Zambakları 🌿</a></li>
+        <li><a href="#supernatural" class="mobile-nav-link"><span>04</span> Supernatural Dünyamız</a></li>
+        <li><a href="#afet" class="mobile-nav-link"><span>05</span> Afet 🐾</a></li>
+        <li><a href="#why-i-love-you" class="mobile-nav-link"><span>06</span> Seni Neden Seviyorum?</a></li>
+        <li><a href="#counter" class="mobile-nav-link"><span>07</span> 22 / 07 Canlı Sayaç</a></li>
+        <li><a href="#final" class="mobile-nav-link"><span>08</span> Sonsuza Dek 💜</a></li>
+      </ul>
+      <div class="drawer-footer">
+        <span>Sadece Senin İçin Hazırlandı ✦</span>
+      </div>
+    </div>
+
+    <main>
+      <!-- ============================================================
+           5. HERO SECTION (100svh Mobile-First)
+           ============================================================ -->
+      <section id="hero" class="section hero-section">
+        <div class="hero-aurora" aria-hidden="true"></div>
+
+        <!-- Ambient SVG Lily Silhouettes on Left & Right with Gentle Sway -->
+        <div class="hero-lily-ambient hero-lily-left" aria-hidden="true">
+          <svg viewBox="0 0 120 180" fill="none" stroke="currentColor">
+            <path d="M60 180 C60 110, 52 75, 24 35 C42 35, 54 55, 60 75 C66 55, 78 35, 96 35 C68 75, 60 110, 60 180 Z"
+              stroke-width="1.4" opacity="0.65" />
+            <path d="M60 75 C42 20, 24 25, 12 45 C24 58, 46 60, 60 75 Z" stroke-width="1.2" opacity="0.55" />
+            <path d="M60 75 C78 20, 96 25, 108 45 C96 58, 74 60, 60 75 Z" stroke-width="1.2" opacity="0.55" />
+            <circle cx="60" cy="55" r="2.5" fill="currentColor" opacity="0.8" />
+          </svg>
+        </div>
+        <div class="hero-lily-ambient hero-lily-right" aria-hidden="true">
+          <svg viewBox="0 0 120 180" fill="none" stroke="currentColor">
+            <path d="M60 180 C60 110, 52 75, 24 35 C42 35, 54 55, 60 75 C66 55, 78 35, 96 35 C68 75, 60 110, 60 180 Z"
+              stroke-width="1.4" opacity="0.65" />
+            <path d="M60 75 C42 20, 24 25, 12 45 C24 58, 46 60, 60 75 Z" stroke-width="1.2" opacity="0.55" />
+            <path d="M60 75 C78 20, 96 25, 108 45 C96 58, 74 60, 60 75 Z" stroke-width="1.2" opacity="0.55" />
+            <circle cx="60" cy="55" r="2.5" fill="currentColor" opacity="0.8" />
+          </svg>
+        </div>
+
+        <div class="hero-content">
+          <div class="hero-badge reveal-item">
+            <span class="badge-star">✦</span>
+            <span>Karşılıklı Zorbalama Kulübü Resmi Portalı</span>
+            <span class="badge-star">✦</span>
+          </div>
+
+          <!-- Elegant Serif Callout: Şeyma, -->
+          <div class="hero-name-callout reveal-item" id="heroNameCallout">
+            Şeyma,
+          </div>
+
+          <h1 class="hero-title reveal-item" id="heroTitle">
+            Beni zorbalamayı en iyi beceren insan...
+          </h1>
+
+          <p class="hero-subtitle reveal-item" id="heroSubtitle">
+            ve yine de yanından ayrılamadığım tek kişi.
+          </p>
+
+          <p class="hero-microcopy reveal-item" id="heroMicrocopy">
+            Duygusal şeyler yazacaktım ama biliyorum ki hemen dalga geçip zorbalayacaksın. O yüzden tam bize göre
+            bir yer yaptım. 💜
+          </p>
+
+          <a href="#story" class="scroll-prompt reveal-item" aria-label="Hikâyemize devam et">
+            <span class="scroll-prompt-text">aşağı kaydır da laf sok</span>
+            <div class="scroll-arrow-box" aria-hidden="true">
+              <span class="scroll-arrow">↓</span>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           6. ROMANTIC STORY SECTION
+           ============================================================ -->
+      <section id="story" class="section story-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag">Bölüm I • Suç Ortaklığı</span>
+            <h2 class="section-title">Nasıl Katlanıyoruz?</h2>
+            <div class="title-divider" aria-hidden="true"><span>✦</span></div>
+          </div>
+
+          <div class="story-grid">
+            <div class="story-image-wrap reveal-item">
+              <div class="image-frame glass-panel">
+                <img id="storyImage" src="images/IMG_2680.jpeg" alt="Şeyma ve ben" class="story-img">
+                <div class="image-overlay-glow" aria-hidden="true"></div>
+                <div class="image-caption-tag">
+                  <span>Şeyma & Biz • 22/07</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="story-text-wrap reveal-item">
+              <div class="story-card glass-panel">
+                <div class="quote-mark" aria-hidden="true">“</div>
+                <div class="story-paragraphs" id="storyContent">
+                  <p>
+                    Düzgünce romantik cümleler kurmayı beceremeyen, her ciddi anın sonunu mutlaka birbirimizle dalga
+                    geçerek bitiren bir çiftiz kabul edelim.
+                  </p>
+                  <p>
+                    Her gün "bugün acaba birbirimize nereden sataşsak" diye uyanıp, günün sonunda yine birbirimize
+                    sarmamız tesadüf olamaz Şeyma.
+                  </p>
+                  <p>
+                    Birlikte sessizce durmak yerine sürekli birbirimizi zorbalamamız ve yine de dünyanın en eğlenceli
+                    ikilisi olmamız... İyi ki varsın (arada sırada aşırı gıcık olsan da).
+                  </p>
+                  <div class="story-stats-pills">
+                    <span class="stat-pill"><span>😂 Kahkaha:</span> <strong>%100</strong></span>
+                    <span class="stat-pill"><span>🎯 Şeyma'nın Haklılığı:</span> <strong>Tartışmasız</strong></span>
+                    <span class="stat-pill"><span>💜 Birbirine Katlanma:</span> <strong>Sonsuz</strong></span>
+                  </div>
+                </div>
+                <div class="story-card-footer">
+                  <span class="signature-date">22 • 07 ✦ Zorbalıkla Sevgi Arası</span>
+                  <span class="signature-heart">💜</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           7. EDITORIAL PHOTO GALLERY SECTION + LIGHTBOX
+           ============================================================ -->
+      <section id="gallery" class="section gallery-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag">Bölüm II • Anılar</span>
+            <h2 class="section-title">Bizden Küçük Anlar</h2>
+            <p class="section-subtitle">Kameralara yakalanan, bazen çok tatlı bazen de "bunu kesin bana karşı
+              kullanacak" dediğim anlar...</p>
+            <div class="title-divider" aria-hidden="true"><span>✦</span></div>
+          </div>
+
+          <!-- Dynamic Editorial / Masonry Photo Grid (Mobile-friendly 1-2 cols, Desktop 3 cols) -->
+          <div class="gallery-masonry" id="galleryGrid">
+            <!-- Injected dynamically by script.js with all 14 authentic photos -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           8. DEDICATED LILY SECTION: "ŞEYMA'NIN ÇİÇEĞİ"
+           ============================================================ -->
+      <section id="lily" class="section lily-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag lily-tag">Bölüm III • Şeyma'nın Çiçeği 🌿</span>
+            <p class="lily-pre-heading">Şeyma'nın sevdiği şeylerden biri...</p>
+            <h2 class="section-title lily-title">Zambaklar.</h2>
+            <div class="title-divider lily-divider" aria-hidden="true"><span>✦</span></div>
+          </div>
+
+          <div class="lily-card-container reveal-item">
+            <div class="lily-showcase-card glass-panel">
+              <div class="lily-image-wrap">
+                <div class="lily-frame">
+                  <img src="images/seyma_lily.jpg" alt="Şeyma için zarif beyaz zambak" loading="lazy" class="lily-img">
+                  <div class="lily-halo-glow" aria-hidden="true"></div>
+                </div>
+              </div>
+
+              <div class="lily-narrative-wrap">
+                <blockquote class="lily-romantic-quote">
+                  "Zambaklar zarif, asil ve masum...<br>
+                  Yani senin sadece uyurken veya benden bir şey isterkenki haline benziyor."
+                </blockquote>
+
+                <div class="lily-subtext">
+                  Normalde beni zorbalarken hiç zambak gibi durmuyorsun ama yine de en sevdiğin çiçeğin hatırına buraya
+                  koydum. İtiraf edeyim, sana çok yakışıyor.
+                </div>
+
+                <div class="botany-tag" aria-hidden="true">
+                  ✦ Botanik Notu: Zambaklar çok narindir ama Şeyma'nın laf sokma hızına yetişemezler.
+                </div>
+
+                <div class="lily-action-wrap">
+                  <button type="button" id="lilyPetalBtn" class="btn-lily-action">
+                    <span>Kocaman Bir Buket Aç 💐</span>
+                  </button>
+                  <span id="lilyFeedback" class="lily-feedback" aria-live="polite"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           ELEGANT NAME DIVIDER
+           ============================================================ -->
+      <div class="name-signature-divider reveal-item" aria-hidden="true">
+        <span class="divider-sparkle">✦</span>
+        <span class="divider-name">Ş E Y M A</span>
+        <span class="divider-sparkle">✦</span>
+      </div>
+
+      <!-- ============================================================
+           9. SUPERNATURAL SECTION (CASE FILE #2207)
+           ============================================================ -->
+      <section id="supernatural" class="section supernatural-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag">Bölüm IV • Doğaüstü Tehdit Dosyası</span>
+            <h2 class="section-title supernatural-title">Winchester Kardeşlerin Çözemediği Olay</h2>
+            <p class="section-subtitle">
+              Dean ve Sam bile bu kadar tehlikeli bir zorbalık seviyesiyle karşılaşmamıştı.
+            </p>
+            <div class="title-divider supernatural-divider" aria-hidden="true"><span>✡</span></div>
+          </div>
+
+          <div class="supernatural-container reveal-item">
+            <div class="supernatural-card glass-panel" id="supernaturalCard">
+              <div class="card-grunge-overlay" aria-hidden="true"></div>
+
+              <!-- Classified Archive Details -->
+              <div class="case-file-header">
+                <div class="case-badge">
+                  <span class="badge-icon">🗂</span>
+                  <span class="badge-text">CLASSIFIED REPORT</span>
+                </div>
+                <div class="case-stamp">DANGER: HIGH ZORBA</div>
+              </div>
+
+              <div class="case-content">
+                <div class="case-row">
+                  <span class="case-label">CASE FILE</span>
+                  <span class="case-val case-number">#2207</span>
+                </div>
+
+                <div class="case-divider"></div>
+
+                <div class="case-row">
+                  <span class="case-label">STATUS</span>
+                  <span class="case-val case-status">KABULLENİLDİ</span>
+                </div>
+
+                <div class="case-row">
+                  <span class="case-label">SUBJECT</span>
+                  <span class="case-val case-subject">ŞEYMA</span>
+                </div>
+
+                <div class="case-row">
+                  <span class="case-label">LOCATION</span>
+                  <span class="case-val case-location">CANININ İSTEDİĞİ HER YER</span>
+                </div>
+
+                <div class="case-row case-row-block">
+                  <span class="case-label">HUNTER'S LOG</span>
+                  <p class="case-notes">
+                    "Gözlem Raporu: Kendisiyle herhangi bir konuda iddialaşmak imkansız; bir bakışıyla anında haklı
+                    çıkıyor. Dean Winchester'ın Impala'sına duyduğu bağlılığı aratmayacak kadar güçlü ve tatlı bir
+                    bağ... Bütün evrenlerin ve gizemlerin arasında karşılaştığım en güzel olay sensin, Şeyma."
+                  </p>
+                </div>
+              </div>
+
+              <div class="case-footer">
+                <span class="case-rune">ᛟ ᚦ ᚱ ᛖ ᛗ ᛟ ᚱ</span>
+                <span class="case-code">COORD: 22.07.∞ // TEK KURTULUŞ: KABULLENMEK</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           10. AFET (THE CAT) SPECIAL SECTION
+           ============================================================ -->
+      <section id="afet" class="section afet-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag cat-tag">Bölüm V • Eski Düşman, Yeni Suç Ortağı 🐾</span>
+            <h2 class="section-title">Afet'in Isırma Günlükleri 🐈</h2>
+            <p class="section-subtitle">
+              Beni ilk gördüğünde doğrudan yok etmeye programlanmış küçük bir canavardı...
+            </p>
+            <div class="title-divider cat-divider" aria-hidden="true"><span>🐾</span></div>
+          </div>
+
+          <div class="afet-grid">
+            <div class="afet-image-wrap reveal-item">
+              <div class="afet-frame glass-panel">
+                <img id="afetImage" src="images/IMG_2735.jpeg" alt="Afet ve Şeyma" loading="lazy" class="afet-img">
+                <div class="afet-glow-effect" aria-hidden="true"></div>
+                <div class="afet-hearts-float" id="afetHeartsFloat" aria-hidden="true">
+                  <span>🐾</span>
+                  <span>🦷</span>
+                  <span>🐾</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="afet-dossier-wrap reveal-item">
+              <div class="afet-dossier glass-panel">
+                <div class="dossier-ribbon">
+                  <span>🐾 GİZLİ VAKA #AFET // TEHDİT: DÜŞÜRÜLDÜ</span>
+                </div>
+
+                <h3 class="afet-name">AFET</h3>
+                <p class="afet-role">Eski Suikastçı, Şimdiki Suç Ortağımız (Bazen Hâlâ Isırıyor)</p>
+
+                <div class="dossier-traits">
+                  <div class="trait-item">
+                    <span class="trait-icon">🦷</span>
+                    <div class="trait-info">
+                      <span class="trait-label">İlk Karşılaşma Protokolü</span>
+                      <span class="trait-value">Eve ilk girdiğimde ağzını 180 derece açıp doğrudan beni ısırmaya ve tek
+                        lokmada yutmaya çalıştı.</span>
+                    </div>
+                  </div>
+
+                  <div class="trait-item">
+                    <span class="trait-icon">🦮</span>
+                    <div class="trait-info">
+                      <span class="trait-label">Büyük Dönüm Noktası</span>
+                      <span class="trait-value">Dışarı çıkarıp gezdirdim ve barış sağlandı! Gezdirilince anında taraf
+                        değiştirip beni sevmeye karar verdi.</span>
+                    </div>
+                  </div>
+
+                  <div class="trait-item">
+                    <span class="trait-icon">🤝</span>
+                    <div class="trait-info">
+                      <span class="trait-label">Şeyma ile Gizli Koalisyon</span>
+                      <span class="trait-value">Şeyma bana her laf soktuğunda arkadan miyavlayarak tasdikliyor. Evde
+                        bana karşı 2'ye 1 çete kurdular.</span>
+                    </div>
+                  </div>
+
+                  <div class="trait-item">
+                    <span class="trait-icon">👑</span>
+                    <div class="trait-info">
+                      <span class="trait-label">Güncel İstihbarat</span>
+                      <span class="trait-value">Artık beni çok seviyor çünkü gezdirdim... Gerçekten sevdi mi yoksa
+                        gezdiren insanı mı yaptı hâlâ şüpheliyiz.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="afet-mini-log">
+                  <span class="afet-log-tag">🐾 SAHA GÖZLEM NOTU #AFET:</span>
+                  <p>"Isırma teşebbüsü %100 azaldı, kucakta uyuma oranı %80 arttı. Ancak mama saati 5 dakika gecikirse
+                    eski günlere dönme riski devam ediyor."</p>
+                </div>
+
+                <div class="afet-action-box">
+                  <button type="button" id="afetLoveBtn" class="btn-afet-love">
+                    <span>Afet'e Yaş Mama & Gezdirme Rüşveti Ver 🐾</span>
+                  </button>
+                  <span id="afetPurrFeedback" class="afet-feedback" aria-live="polite"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           11. "SENİ NEDEN SEVİYORUM?" SECTION
+           ============================================================ -->
+      <section id="why-i-love-you" class="section reasons-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag">Bölüm VI • Gerçekler Masaya Yatırılıyor</span>
+            <h2 class="section-title">Sana Katlanma Sebeplerim</h2>
+            <p class="section-subtitle">
+              Bütün bu laf sokmalara ve zorbalıklara rağmen neden hâlâ yanımdasın merak ediyorsan:
+            </p>
+            <div class="title-divider" aria-hidden="true"><span>✦</span></div>
+          </div>
+
+          <div class="reasons-grid">
+            <div class="reason-card glass-panel reveal-item" data-index="01">
+              <div class="reason-number">01</div>
+              <h3 class="reason-heading">Beni zorbalama hızın</h3>
+              <p class="reason-text">
+                Ağzımdan çıkan en ufak hatayı saniyesinde yakalayıp üç gün boyunca bana karşı acımasızca espri malzemesi
+                yapabilme yeteneğin.
+              </p>
+            </div>
+
+            <div class="reason-card glass-panel reveal-item" data-index="02">
+              <div class="reason-number">02</div>
+              <h3 class="reason-heading">Afet'in beni ısırmasını izlemen</h3>
+              <p class="reason-text">
+                Afet ilk günlerde beni çiğ çiğ yemeye çalışırken senin kenardan gülüşün ve ancak son saniyede araya
+                girip beni kurtarman.
+              </p>
+            </div>
+
+            <div class="reason-card glass-panel reveal-item" data-index="03">
+              <div class="reason-number">03</div>
+              <h3 class="reason-heading">Her konuda haklı çıkman</h3>
+              <p class="reason-text">
+                Konu ne olursa olsun, tatlı tatlı konuşup bir şekilde her zaman haklı çıkmayı başarma yeteneğin ve bunu
+                yaparkenki o sevimli gülüşün.
+              </p>
+            </div>
+
+            <div class="reason-card glass-panel reveal-item" data-index="04">
+              <div class="reason-number">04</div>
+              <h3 class="reason-heading">Birlikte sınırsız saçmalayabilmemiz</h3>
+              <p class="reason-text">
+                Dışarıya karşı son derece aklı başında iki insan gibi görünüp, baş başa kalınca beş yaşındaki iki çocuk
+                gibi delirebilmemiz.
+              </p>
+            </div>
+
+
+
+            <div class="reason-card glass-panel reveal-item" data-index="06">
+              <div class="reason-number">06</div>
+              <h3 class="reason-heading">Bütün bunlara rağmen...</h3>
+              <p class="reason-text">
+                Bütün bu zorbalıklarına ve laf sokmalarına rağmen; günün sonunda başımı omzuna koyup huzur bulduğum tek
+                insan olman.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           12. 22 / 07 RELATIONSHIP TIME COUNTER SECTION
+           ============================================================ -->
+      <section id="counter" class="section counter-section">
+        <div class="section-container">
+          <div class="section-header reveal-item">
+            <span class="section-tag">Bölüm VII • Tahammül Süremiz</span>
+            <h2 class="section-title">Ne Zamandır Birbirimize Katlanıyoruz?</h2>
+            <div class="date-hero-display">
+              <span class="date-digit">22</span>
+              <span class="date-slash">/</span>
+              <span class="date-digit">07</span>
+            </div>
+            <p class="section-subtitle">22/07 </p>
+            <div class="title-divider" aria-hidden="true"><span>✦</span></div>
+          </div>
+
+          <div class="counter-grid reveal-item">
+            <div class="counter-box glass-panel">
+              <span class="counter-val" id="daysVal">0</span>
+              <span class="counter-label">GÜN</span>
+            </div>
+            <div class="counter-separator">:</div>
+            <div class="counter-box glass-panel">
+              <span class="counter-val" id="hoursVal">00</span>
+              <span class="counter-label">SAAT</span>
+            </div>
+            <div class="counter-separator">:</div>
+            <div class="counter-box glass-panel">
+              <span class="counter-val" id="minutesVal">00</span>
+              <span class="counter-label">DAKİKA</span>
+            </div>
+            <div class="counter-separator">:</div>
+            <div class="counter-box glass-panel">
+              <span class="counter-val" id="secondsVal">00</span>
+              <span class="counter-label">SANİYE</span>
+            </div>
+          </div>
+
+          <p class="counter-live-subtext reveal-item">
+            Ve tek bir saniyesinde bile sıkılmadık
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           13. ROMANTIC QUOTE SECTION
+           ============================================================ -->
+      <section id="quote" class="section quote-section">
+        <div class="quote-container reveal-item">
+          <div class="quote-stars" aria-hidden="true">✦ &nbsp; ✦ &nbsp; ✦</div>
+          <blockquote class="romantic-blockquote">
+            "Dünyada 8 milyar insan var.<br>
+            Ama beni senin kadar sinir edip, aynı anda bu kadar güldürebilen başka hiç kimse yok."
+          </blockquote>
+          <cite class="quote-author">— mecburen ben</cite>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           14. FINAL SECTION & CLOSING (ŞEYMA'YA ÖZEL)
+           ============================================================ -->
+      <section id="final" class="section final-section">
+        <div class="section-container">
+          <div class="final-card glass-panel reveal-item">
+            <div class="final-emblem" aria-hidden="true">💜</div>
+
+            <div class="final-name-callout">Şeyma,</div>
+
+            <p class="final-narrative-lead">
+              Buraya kadar okuduysan muhtemelen şimdiden bana laf sokacak ve dalga geçecek en az beş farklı detay
+              yakalamışsındır.
+            </p>
+
+            <p class="final-narrative-sub">
+              Ama yine de dürüst olmam gerekirse...
+            </p>
+
+            <div class="final-grand-statement">
+              "İyi ki varsın."
+            </div>
+
+            <div class="final-echo-statements">
+              <p class="final-echo-line">Seninle didişmek bile başkasıyla eğlenmekten bin kat daha güzel.</p>
+              <p class="final-echo-line">Daha uzun yıllar birbirimizin canını sıkmaya devam edeceğiz, haberin olsun.</p>
+            </div>
+
+            <div class="final-action-wrap">
+              <button type="button" id="wishBtn" class="btn-wish">
+                <span>Bir Dilek Tut (Umarım Ben Haklı Çıkarım) ✨</span>
+              </button>
+            </div>
+
+            <div class="final-footer-details">
+              <div class="infinity-symbol">22 • 07 • ∞ </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============================================================
+         FLOATING MUSIC PLAYER (MOBILE-FIRST COMPACT PILL)
+         ============================================================ -->
+    <div class="music-floating-player glass-panel" id="musicPlayer" role="region" aria-label="Müzik Çalar">
+      <button type="button" id="musicPlayToggleBtn" class="player-btn" aria-label="Müziği Başlat / Durdur">
+        <svg id="playIcon" class="icon-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+        <svg id="pauseIcon" class="icon-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"
+          style="display:none;">
+          <rect x="6" y="4" width="4" height="16"></rect>
+          <rect x="14" y="4" width="4" height="16"></rect>
+        </svg>
+      </button>
+
+      <div class="player-equalizer" id="playerEqualizer" aria-hidden="true">
+        <span class="eq-bar bar-1"></span>
+        <span class="eq-bar bar-2"></span>
+        <span class="eq-bar bar-3"></span>
+        <span class="eq-bar bar-4"></span>
+      </div>
+
+      <div class="player-info" id="playerInfo">
+        <span class="player-track-name">Take Me There</span>
+        <span class="player-track-sub">Bizim Şarkımız ♪</span>
+      </div>
+
+      <div class="volume-slider-wrap desktop-only" id="volumeWrap">
+        <button type="button" id="volumeMuteBtn" class="player-btn btn-mute" aria-label="Sesi Aç / Kapat">
+          <svg id="volumeIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+        </button>
+        <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.05" value="0.7"
+          aria-label="Ses Seviyesi">
+      </div>
+    </div>
+
+    <!-- ============================================================
+         3D INTERACTIVE LILY BOUQUET MODAL (ŞEYMA'YA ÖZEL)
+         ============================================================ -->
+    <div id="bouquetModal" class="bouquet-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="3D Zambak Buketi">
+      <div class="bouquet-backdrop" id="bouquetBackdrop"></div>
+
+      <div class="bouquet-content">
+        <button type="button" id="bouquetCloseBtn" class="bouquet-close-btn" aria-label="Buketi Kapat">
+          ✕
+        </button>
+
+        <div class="bouquet-header">
+          <div class="bouquet-badge">
+            <span class="badge-star">✦</span>
+            <span>Şeyma İçin Özel Buket</span>
+            <span class="badge-star">✦</span>
+          </div>
+          <h2 class="bouquet-modal-title">Kocaman Bir Zambak Buketi 💐</h2>
+          <p class="bouquet-gesture-hint">👆 Buketi tutarak parmağınla veya farenle 360° döndürebilirsin</p>
+        </div>
+
+        <!-- 3D Interactive Stage -->
+        <div class="bouquet-3d-stage" id="bouquetStage">
+          <div class="bouquet-3d-wrapper" id="bouquet3DWrapper">
+            <div class="bouquet-aura" aria-hidden="true"></div>
+            
+            <div class="bouquet-3d-card" id="bouquet3DCard">
+              <img src="images/seyma_lily_bouquet.jpg" alt="Şeyma için beyaz zambak buketi" class="bouquet-full-img" id="bouquetFullImg" draggable="false">
+              <div class="bouquet-card-glow" aria-hidden="true"></div>
+            </div>
+
+            <!-- Orbiting 3D Petals & Sparkles -->
+            <div class="bouquet-orbit" aria-hidden="true">
+              <span class="orbit-item o-1">🌸</span>
+              <span class="orbit-item o-2">🌿</span>
+              <span class="orbit-item o-3">✨</span>
+              <span class="orbit-item o-4">🤍</span>
+              <span class="orbit-item o-5">✦</span>
+              <span class="orbit-item o-6">💜</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Action Bar -->
+        <div class="bouquet-actions">
+          <button type="button" id="bouquetSpinToggleBtn" class="btn-bouquet-action">
+            <span id="spinIcon">🔄</span>
+            <span id="spinLabel">Otomatik Döndür: Açık</span>
+          </button>
+          <button type="button" id="bouquetRainBtn" class="btn-bouquet-action">
+            <span>🌿 Zambak Yağmuru</span>
+          </button>
+          <button type="button" id="bouquetResetBtn" class="btn-bouquet-action">
+            <span>🎯 Sıfırla</span>
+          </button>
+        </div>
+
+        <p class="bouquet-footer-love">
+          "En sevdiğin çiçeklerle dolu koca bir dünya... 💜"
+        </p>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         FULLSCREEN LIGHTBOX MODAL (Touch swipe & gesture friendly)
+         ============================================================ -->
+    <div id="lightboxModal" class="lightbox-modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+
+      <div class="lightbox-content">
+        <button type="button" id="lightboxCloseBtn" class="lightbox-close-btn" aria-label="Fotoğrafı Kapat">
+          ✕
+        </button>
+
+        <div class="lightbox-image-container">
+          <img id="lightboxImg" src="" alt="Büyütülmüş Fotoğraf" class="lightbox-img">
+        </div>
+
+        <div class="lightbox-footer">
+          <p id="lightboxCaption" class="lightbox-caption"></p>
+          <span id="lightboxCounter" class="lightbox-counter">1 / 14</span>
+        </div>
+
+        <button type="button" id="lightboxPrevBtn" class="lightbox-nav-btn prev-btn" aria-label="Önceki Fotoğraf">
+          ‹
+        </button>
+        <button type="button" id="lightboxNextBtn" class="lightbox-nav-btn next-btn" aria-label="Sonraki Fotoğraf">
+          ›
+        </button>
+      </div>
+    </div>
+
+  </div> <!-- End #mainSite -->
+
+  <script src="script.js"></script>
+</body>
+
+</html>
