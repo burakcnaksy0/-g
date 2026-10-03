@@ -29,15 +29,15 @@ const siteConfig = {
     { src: "images/IMG_2735.jpeg", title: "Afet & Şeyma Koalisyonu", caption: "Beni ısırma planları yaparken yakalandıkları o tarihi an... 🐈" },
     { src: "images/IMG_2135.jpeg", title: "Nadir Sakin Anlarımızdan", caption: "Birbirimizi zorbalamayı unuttuğumuz o nadir 10 dakikadan biri." },
     { src: "images/IMG_2539.jpeg", title: "Şüpheli Bakışlar", caption: "'Acaba yine ne saçmaladı' bakışı tescillendi." },
-    { src: "images/IMG_2169.jpeg", title: "Birlikte Biriktirilen Didişmeler", caption: "Her hatıranın içinde senin o tatlı gıcıklığının olması." },
+    { src: "images/IMG_2169.jpeg", title: "Zorla çektirilen fotoğraflar", caption: "Her hatıranın içinde senin o tatlı gıcıklığının olması." },
     { src: "images/IMG_2199.jpeg", title: "Gece Mesaisi", caption: "Gece gece kim kimi daha çok sinir edecek yarışması." },
     { src: "images/IMG_2200.jpeg", title: "Ateşkes İlan Edildi", caption: "Kısa süreli barış antlaşması imzalanmış gibi duruyor." },
-    { src: "images/IMG_2311.jpeg", title: "Tatlı Bela", caption: "Zararsız göründüğüne aldanmayın, her an laf sokabilir." },
-    { src: "images/IMG_2341.jpeg", title: "Yolculuk Günlüğü", caption: "Yolda en az üç kez 'nereden gideceğiz' diye bana akıl vermen garanti." },
+    { src: "images/IMG_2311.jpeg", title: "Tatlı", caption: "Zararsız göründüğüne aldanmayın, her an laf sokabilir." },
+    { src: "images/IMG_2341.jpeg", title: "Fav Tepsi", caption: "Yolda en az üç kez 'nereden gideceğiz' diye bana akıl vermen garanti." },
     { src: "images/IMG_2344.jpeg", title: "Göz Hapsi", caption: "Beni her an kontrol altında tutma çabaların..." },
-    { src: "images/IMG_2593.jpeg", title: "Tek Güvenli Bölge", caption: "Bütün bu didişmelerin arasında dünyanın en huzurlu yeri." },
-    { src: "images/IMG_9563.jpeg", title: "Dedikodu Saati", caption: "Sadece ikimizin anladığı bakışmalar ve fısıltılı gülüşmeler." },
-    { src: "images/IMG_9564.jpeg", title: "İyi ki Başımdasın", caption: "Seni zorbalamayı da, seninle didişmeyi de çok seviyorum." }
+    { src: "images/IMG_2593.jpeg", title: "Serumlanmaca", caption: "Bütün bu didişmelerin arasında dünyanın en huzurlu yeri." },
+    { src: "images/IMG_9563.jpeg", title: "Bu foto hala komik hshsh", caption: "Sadece ikimizin anladığı bakışmalar ve fısıltılı gülüşmeler." },
+    { src: "images/IMG_9564.jpeg", title: "Başımla Beraber", caption: "Seni zorbalamayı da, seninle didişmeyi de çok seviyorum." }
   ]
 };
 
@@ -494,7 +494,7 @@ function bouquetAnimationLoop() {
   bouquet3DState.currentRotY += (bouquet3DState.targetRotY - bouquet3DState.currentRotY) * 0.12;
 
   if (elements.bouquet3DWrapper) {
-    elements.bouquet3DWrapper.style.transform = 
+    elements.bouquet3DWrapper.style.transform =
       `rotateX(${bouquet3DState.currentRotX.toFixed(2)}deg) rotateY(${bouquet3DState.currentRotY.toFixed(2)}deg)`;
   }
 
@@ -545,7 +545,7 @@ function initBouquet3D() {
     bouquet3DState.lastPointerY = e.clientY;
     try {
       elements.bouquetStage.setPointerCapture(e.pointerId);
-    } catch (_) {}
+    } catch (_) { }
     elements.bouquetStage.style.cursor = 'grabbing';
   });
 
@@ -570,7 +570,7 @@ function initBouquet3D() {
       bouquet3DState.isDragging = false;
       try {
         if (e && e.pointerId) elements.bouquetStage.releasePointerCapture(e.pointerId);
-      } catch (_) {}
+      } catch (_) { }
       elements.bouquetStage.style.cursor = 'grab';
     }
   };
